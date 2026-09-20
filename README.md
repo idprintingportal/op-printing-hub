@@ -3,34 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skillo ID Print Solutions</title>
+    <title>Skillo ID Print Solutions - Standalone</title>
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- External JS Libraries -->
-    <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-    
-    <!-- Cropper.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css"/>
-    <script defer src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+    <!-- Fonts & Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';</script>
 
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            --card-bg: rgba(30, 41, 59, 0.88);
-            --accent-blue: #38bdf8;
-            --btn-add: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            --btn-download: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --success: #10b981;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.12);
         }
 
         * {
@@ -41,216 +30,324 @@
         }
 
         body {
-            background: var(--bg-gradient);
+            background: radial-gradient(circle at top, #1e1b4b 0%, #0f172a 100%);
             min-height: 100vh;
-            padding: 20px 10px;
+            padding: 20px;
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: var(--text-main);
         }
 
-        .portal-main-heading {
-            font-size: 26px;
+        .header-title {
+            font-size: 28px;
             font-weight: 800;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #f43f5e 100%);
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             text-align: center;
         }
 
-        #mainApp {
+        .app-container {
             width: 100%;
-            max-width: 1100px;
-        }
-
-        .container {
+            max-width: 900px;
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            padding: 25px 20px;
+            border: 1px solid var(--border);
             border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            width: 100%;
-            text-align: center;
-        }
-
-        .upload-section {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .upload-box {
-            border: 2px dashed rgba(56, 189, 248, 0.4);
             padding: 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--accent);
             border-radius: 14px;
-            cursor: pointer;
-            background: rgba(15, 23, 42, 0.6);
-            flex: 1;
-            min-width: 250px;
-            transition: 0.3s;
-        }
-
-        .upload-box:hover {
-            border-color: var(--accent-blue);
-            background: rgba(56, 189, 248, 0.08);
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .control-panel {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-
-        .qty-select-group {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .qty-input {
-            width: 80px;
-            padding: 6px;
-            border-radius: 8px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--accent-blue);
-            color: #fff;
-            font-size: 15px;
+            padding: 30px 20px;
             text-align: center;
+            background: rgba(15, 23, 42, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .quick-qty-btn {
-            padding: 6px 14px;
+        .upload-area:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #60a5fa;
+        }
+
+        .file-input { display: none; }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        .control-box {
+            background: rgba(15, 23, 42, 0.7);
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .control-box label {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .quick-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .q-btn {
             background: #334155;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: none;
             color: #fff;
+            padding: 6px 12px;
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
+            flex: 1;
         }
+
+        .q-btn:hover { background: var(--accent-hover); }
 
         .btn-group {
             display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 10px;
         }
 
-        .action-btn {
-            padding: 12px 28px;
-            font-size: 14px;
-            font-weight: 600;
+        .btn {
+            flex: 1;
+            padding: 14px;
             border: none;
             border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
             color: #fff;
-            transition: 0.3s;
+            transition: 0.2s;
+            font-size: 14px;
         }
 
-        .btn-add { background: var(--btn-add); }
-        .btn-reset { 
-            background: rgba(239, 68, 68, 0.2); 
-            border: 1px solid rgba(239, 68, 68, 0.4); 
-            color: #fca5a5; 
-        }
+        .btn-process { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); }
+        .btn-process:hover { opacity: 0.9; }
 
-        .file-gallery-list {
+        .btn-print { background: linear-gradient(135deg, #10b981 0%, #059669 100%); display: none; }
+        .btn-print:hover { opacity: 0.9; }
+
+        .btn-reset { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+
+        /* Print Sheet Layout */
+        #printArea {
+            margin-top: 30px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .a4-sheet {
+            width: 210mm;
+            min-height: 297mm;
+            background: #ffffff;
+            padding: 10mm;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: repeat(2, 85.6mm);
+            grid-auto-rows: 53.9mm;
+            gap: 5mm 8mm;
             justify-content: center;
-            margin: 15px 0;
-            min-height: 50px;
-            padding: 14px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 12px;
+            align-content: start;
+        }
+
+        .card-frame {
+            width: 85.6mm;
+            height: 53.9mm;
+            border: 1px dashed #ccc;
+            border-radius: 4mm;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+
+        .card-frame canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Direct Browser Print Styling */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .a4-sheet {
+                box-shadow: none;
+                margin: 0;
+                padding: 10mm;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1 class="portal-main-heading">Skillo ID Print Solutions</h1>
+    <h1 class="header-title">Skillo ID Print Solutions</h1>
 
-    <!-- Directly Accessible Main App -->
-    <div id="mainApp">
-        <div class="container">
-            <h2 style="font-size: 20px; color: var(--accent-blue);">ID Card Printing Suite</h2>
-            <p style="color: var(--text-muted); font-size: 13px;">Aapki hosting par chalne wala standalone print tool.</p>
+    <div class="app-container">
+        <!-- File Uploader -->
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <h3 style="font-size: 16px; color: var(--accent);">PDF ya Image Files Upload Karein</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Click karke files chunein (PDF, JPG, PNG)</p>
+            <input type="file" id="fileInput" class="file-input" accept="application/pdf,image/*" multiple>
+        </div>
 
-            <div class="upload-section">
-                <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-                    <h3 style="font-size: 15px; color: var(--accent-blue);">Upload File / Image</h3>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">PDF, JPG, ya PNG files select karein</p>
-                    <input type="file" id="fileInput" accept="application/pdf,image/*" multiple>
+        <div id="fileList" style="margin-top: 10px; font-size: 12px; color: var(--text-muted);"></div>
+
+        <!-- Controls -->
+        <div class="controls-grid">
+            <div class="control-box">
+                <label>Cards Per Page (Batch Size)</label>
+                <div class="quick-btn-group">
+                    <button class="q-btn" onclick="setBatch(2)">2 Cards</button>
+                    <button class="q-btn" onclick="setBatch(5)">5 Cards</button>
+                    <button class="q-btn" onclick="setBatch(10)">10 Cards</button>
                 </div>
             </div>
-
-            <div class="file-gallery-list" id="fileGalleryList">
-                <p style="color: var(--text-muted); font-size: 12px;">Koyi file select nahi hui hai.</p>
+            <div class="control-box">
+                <label>Manual Quantity</label>
+                <input type="number" id="cardLimit" value="10" min="1" max="20" style="width: 100%; background: #0f172a; border: 1px solid var(--border); color: #fff; padding: 6px; border-radius: 6px;">
             </div>
+        </div>
 
-            <div class="control-panel">
-                <label style="font-size: 13px; font-weight: 600; color: var(--accent-blue);">Quantity Select Karein</label>
-                <div class="qty-select-group">
-                    <button class="quick-qty-btn" onclick="setQuantity(1)">Single</button>
-                    <button class="quick-qty-btn" onclick="setQuantity(5)">5 Batch</button>
-                    <button class="quick-qty-btn" onclick="setQuantity(10)">10 Batch</button>
-                    <input type="number" id="cardQuantity" class="qty-input" value="1" min="1" max="100">
-                </div>
-            </div>
+        <!-- Action Buttons -->
+        <div class="btn-group">
+            <button class="btn btn-process" id="processBtn" onclick="processFiles()">Layout Process Karein</button>
+            <button class="btn btn-print" id="printBtn" onclick="window.print()">A4 Sheet Print Karein</button>
+            <button class="btn btn-reset" onclick="resetApp()">Reset</button>
+        </div>
 
-            <div class="btn-group">
-                <button class="action-btn btn-add" id="processBtn">Generate Print Layout</button>
-                <button class="action-btn btn-reset" id="resetBtn">Clear All</button>
-            </div>
-
-            <div class="preview-container" id="previewContainer" style="margin-top: 20px;"></div>
+        <!-- Printable Layout -->
+        <div id="printArea">
+            <div class="a4-sheet" id="a4Page"></div>
         </div>
     </div>
 
     <script>
-        function setQuantity(val) {
-            document.getElementById('cardQuantity').value = val;
+        let uploadedFiles = [];
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            uploadedFiles = Array.from(e.target.files);
+            const listDiv = document.getElementById('fileList');
+            if(uploadedFiles.length > 0) {
+                listDiv.innerHTML = `Selected Files: <b>${uploadedFiles.length}</b> file(s)`;
+            } else {
+                listDiv.innerHTML = '';
+            }
+        });
+
+        function setBatch(num) {
+            document.getElementById('cardLimit').value = num;
         }
 
-        // Basic File Selection Handler
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const list = document.getElementById('fileGalleryList');
-            list.innerHTML = '';
-            
-            if (this.files.length === 0) {
-                list.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Koyi file select nahi hui hai.</p>';
+        async function processFiles() {
+            if (uploadedFiles.length === 0) {
+                alert("Kripya pehle file upload karein!");
                 return;
             }
 
-            Array.from(this.files).forEach(file => {
-                const item = document.createElement('div');
-                item.style.cssText = "background: #0f172a; padding: 8px 12px; border-radius: 6px; font-size: 12px; border: 1px solid var(--accent-blue);";
-                item.innerText = file.name;
-                list.appendChild(item);
-            });
-        });
+            const sheet = document.getElementById('a4Page');
+            sheet.innerHTML = '';
+            const limit = parseInt(document.getElementById('cardLimit').value) || 10;
+            let currentCount = 0;
 
-        document.getElementById('resetBtn').addEventListener('click', function() {
+            for (let file of uploadedFiles) {
+                if (currentCount >= limit) break;
+
+                if (file.type === "application/pdf") {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                        if (currentCount >= limit) break;
+                        const page = await pdf.getPage(pageNum);
+                        const canvas = await renderPdfPageToCanvas(page);
+                        addCanvasToSheet(canvas);
+                        currentCount++;
+                    }
+                } else if (file.type.startsWith("image/")) {
+                    const canvas = await renderImageToCanvas(file);
+                    addCanvasToSheet(canvas);
+                    currentCount++;
+                }
+            }
+
+            if (currentCount > 0) {
+                document.getElementById('printBtn').style.display = 'block';
+            }
+        }
+
+        function renderPdfPageToCanvas(page) {
+            return new Promise((resolve) => {
+                const viewport = page.getViewport({ scale: 2 });
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    resolve(canvas);
+                });
+            });
+        }
+
+        function renderImageToCanvas(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        resolve(canvas);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function addCanvasToSheet(canvas) {
+            const sheet = document.getElementById('a4Page');
+            const frame = document.createElement('div');
+            frame.className = 'card-frame';
+            frame.appendChild(canvas);
+            sheet.appendChild(frame);
+        }
+
+        function resetApp() {
+            uploadedFiles = [];
             document.getElementById('fileInput').value = '';
-            document.getElementById('fileGalleryList').innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Koyi file select nahi hui hai.</p>';
-            document.getElementById('previewContainer').innerHTML = '';
-        });
+            document.getElementById('fileList').innerHTML = '';
+            document.getElementById('a4Page').innerHTML = '';
+            document.getElementById('printBtn').style.display = 'none';
+        }
     </script>
 </body>
 </html>
