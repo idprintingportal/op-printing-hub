@@ -1,11 +1,3 @@
-<!--
-  Copyright (c) 2026 Skillo ID Print Solutions. All rights reserved.
-  Proprietary software. This source file, its design, workflows and original
-  implementation may not be copied, redistributed, republished, modified,
-  sublicensed or used for commercial purposes without written permission from
-  Skillo ID Print Solutions. Third-party libraries remain under their own licenses.
--->
-<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta name="referrer" content="no-referrer">
